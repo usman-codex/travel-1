@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, CalendarCheck, Mail, Globe, ChevronDown, ArrowUpRight } from 'lucide-react';
+import { Menu, X, CalendarCheck, Mail, Globe, ArrowUpRight } from 'lucide-react';
 import { FaFacebookF, FaInstagram } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -10,8 +10,10 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [lang, setLang] = useState('EN');
   const [currency, setCurrency] = useState('PKR');
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
@@ -26,15 +28,21 @@ const Navbar = () => {
     { name: 'Blog', href: '/blog' },
   ];
 
+  // Prevent hydration mismatch
+  if (!mounted) return null;
+
   return (
     <>
-      <div className={`fixed top-0 inset-x-0 z-[60] bg-[#0e1a2b] text-[#fbf9f6] text-[11px] transition-all duration-300 ${scrolled ? 'h-0 overflow-hidden opacity-0' : 'h-9 opacity-100'}`}>
-        <div className="max-w-[1400px] mx-auto px-4 md:px-6 h-9 hidden md:flex items-center justify-between">
+      {/* Top Header - Hidden on mobile, shown on desktop */}
+      <div 
+        className={`hidden md:block fixed top-0 inset-x-0 z-[60] bg-[#0e1a2b] text-[#fbf9f6] text-[11px] transition-all duration-300 
+        ${scrolled ? 'h-0 overflow-hidden opacity-0' : 'h-9 opacity-100'}`}
+      >
+        <div className="max-w-[1400px] mx-auto px-4 md:px-6 h-9 flex items-center justify-between">
           <div className="flex items-center gap-6 font-medium">
             <a href="mailto:info@traveloperations.pk" className="flex items-center gap-1.5 hover:text-[#e7a892] transition-colors">
               <Mail size={11} strokeWidth={2} /> info@traveloperations.pk
             </a>
-            
           </div>
           <div className="flex items-center gap-3 font-medium">
              <a href="https://www.facebook.com/p/Travel-Operations-61550269560647/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-[#e7a892] transition-colors">
@@ -47,7 +55,13 @@ const Navbar = () => {
         </div>
       </div>
 
-      <nav className={`fixed inset-x-0 z-50 transition-all duration-300 ${scrolled ? 'top-0 bg-[#fbf9f6]/95 backdrop-blur-md shadow-[0_1px_0_rgba(14,26,43,0.08)]' : 'top-0 md:top-9 bg-[#fbf9f6] border-b border-[#e5dfd4]'}`}>
+      {/* Main Navbar */}
+      <nav 
+        className={`fixed inset-x-0 z-50 transition-all duration-300 
+        ${scrolled 
+          ? 'top-0 bg-[#fbf9f6]/95 backdrop-blur-md shadow-[0_1px_0_rgba(14,26,43,0.08)]' 
+          : 'top-0 md:top-9 bg-[#fbf9f6] border-b border-[#e5dfd4]'}`}
+      >
         <div className="max-w-[1400px] mx-auto px-4 md:px-6 flex items-center justify-between h-20">
           <div className="shrink-0">
             <Link href="/" className="flex items-center gap-2">
@@ -59,6 +73,7 @@ const Navbar = () => {
             </Link>
           </div>
 
+          {/* Desktop Links */}
           <ul className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => (
               <li key={link.name} className="relative group">
@@ -73,6 +88,7 @@ const Navbar = () => {
             ))}
           </ul>
 
+          {/* Right Actions */}
           <div className="flex items-center gap-3">
             <Link href="/book-now" className="hidden md:flex">
               <button
@@ -85,6 +101,7 @@ const Navbar = () => {
               </button>
             </Link>
 
+            {/* Mobile Menu Toggle */}
             <button
               type="button"
               onClick={() => setIsOpen(true)}
@@ -97,6 +114,7 @@ const Navbar = () => {
         </div>
       </nav>
 
+      {/* Mobile Sidebar Menu */}
       <AnimatePresence>
         {isOpen && (
           <>
@@ -175,8 +193,7 @@ const Navbar = () => {
                     href="https://www.facebook.com/p/Travel-Operations-61550269560647/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="Facebook"
-                    className="bg-white border border-[#e5dfd4] p-2.5 rounded-full text-[#0e1a2b] hover:bg-[#c7654d] hover:text-white hover:border-[#c7654d] transition-colors"
+                    className="bg-white border border-[#e5dfd4] p-2.5 rounded-full text-[#0e1a2b] hover:bg-[#c7654d] hover:text-white transition-colors"
                   >
                     <FaFacebookF size={12} />
                   </a>
@@ -184,8 +201,7 @@ const Navbar = () => {
                     href="https://www.instagram.com/travel__operations/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label="Instagram"
-                    className="bg-white border border-[#e5dfd4] p-2.5 rounded-full text-[#0e1a2b] hover:bg-[#c7654d] hover:text-white hover:border-[#c7654d] transition-colors"
+                    className="bg-white border border-[#e5dfd4] p-2.5 rounded-full text-[#0e1a2b] hover:bg-[#c7654d] hover:text-white transition-colors"
                   >
                     <FaInstagram size={12} />
                   </a>
