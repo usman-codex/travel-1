@@ -1,15 +1,13 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, CalendarCheck, Mail, Globe, ArrowUpRight } from 'lucide-react';
+import { Menu, X, CalendarCheck, Mail, ArrowUpRight } from 'lucide-react';
 import { FaFacebookF, FaInstagram } from 'react-icons/fa';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [lang, setLang] = useState('EN');
-  const [currency, setCurrency] = useState('PKR');
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -28,12 +26,10 @@ const Navbar = () => {
     { name: 'Blog', href: '/blog' },
   ];
 
-  // Prevent hydration mismatch
   if (!mounted) return null;
 
   return (
     <>
-      {/* Top Header - Hidden on mobile, shown on desktop */}
       <div 
         className={`hidden md:block fixed top-0 inset-x-0 z-[60] bg-[#0e1a2b] text-[#fbf9f6] text-[11px] transition-all duration-300 
         ${scrolled ? 'h-0 overflow-hidden opacity-0' : 'h-9 opacity-100'}`}
@@ -55,7 +51,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Main Navbar */}
       <nav 
         className={`fixed inset-x-0 z-50 transition-all duration-300 
         ${scrolled 
@@ -73,7 +68,6 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Desktop Links */}
           <ul className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => (
               <li key={link.name} className="relative group">
@@ -88,7 +82,6 @@ const Navbar = () => {
             ))}
           </ul>
 
-          {/* Right Actions */}
           <div className="flex items-center gap-3">
             <Link href="/book-now" className="hidden md:flex">
               <button
@@ -101,7 +94,6 @@ const Navbar = () => {
               </button>
             </Link>
 
-            {/* Mobile Menu Toggle */}
             <button
               type="button"
               onClick={() => setIsOpen(true)}
@@ -114,7 +106,6 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Mobile Sidebar Menu */}
       <AnimatePresence>
         {isOpen && (
           <>
@@ -158,23 +149,6 @@ const Navbar = () => {
                       <ArrowUpRight size={16} strokeWidth={2} className="text-[#143656]/40 group-hover:text-[#c7654d] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                     </Link>
                   ))}
-                </div>
-
-                <div className="px-6 mt-6 flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setLang(lang === 'EN' ? 'UR' : 'EN')}
-                    className="flex-1 border border-[#e5dfd4] rounded-full py-2 text-xs font-semibold text-[#0e1a2b] flex items-center justify-center gap-1.5"
-                  >
-                    <Globe size={12} strokeWidth={2} /> {lang === 'EN' ? 'English' : 'اردو'}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setCurrency(currency === 'PKR' ? 'USD' : 'PKR')}
-                    className="flex-1 border border-[#e5dfd4] rounded-full py-2 text-xs font-semibold text-[#0e1a2b]"
-                  >
-                    {currency}
-                  </button>
                 </div>
               </div>
 
