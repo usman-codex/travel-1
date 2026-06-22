@@ -4,8 +4,7 @@ import { motion } from 'framer-motion';
 
 // Featured carriers shown larger & first
 const featured = [
-  { src: "/images/uzbekistan.png", name: "Uzbekistan Airways" },
-  { src: "/images/pia.png", name: "PIA" },
+  { src: "/images/uzbekistan-logo.png", name: "Uzbekistan Airways" },
 ];
 
 const partners = [
@@ -36,14 +35,14 @@ const PartnersMarquee = () => {
             </h2>
           </div>
           <p className="font-sans text-[#143656]/70 text-sm md:text-base max-w-sm md:text-right">
-            Direct contracts with 30+ carriers — led by <span className="font-semibold text-[#0e1a2b]">Uzbekistan Airways</span> &amp; <span className="font-semibold text-[#0e1a2b]">PIA</span>.
+            Direct contracts with 30+ carriers — led by <span className="font-semibold text-[#0e1a2b]">Uzbekistan Airways</span> .
           </p>
         </div>
       </div>
 
-      {/* Featured carriers */}
+      {/* Featured carriers - Updated to flex and justify-center */}
       <div className="container mx-auto px-6 md:px-10 mb-10">
-        <div className="grid grid-cols-2 gap-4 md:gap-6 max-w-2xl mx-auto">
+        <div className="flex flex-wrap justify-center gap-4 md:gap-6 max-w-2xl mx-auto">
           {featured.map((f, i) => (
             <motion.div
               key={f.name}
@@ -51,7 +50,7 @@ const PartnersMarquee = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.12, duration: 0.5 }}
-              className="bg-white rounded-2xl border border-[#e5dfd4] shadow-[0_12px_40px_-20px_rgba(14,26,43,0.4)] p-6 md:p-8 flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition-transform"
+              className="bg-white rounded-2xl border border-[#e5dfd4] shadow-[0_12px_40px_-20px_rgba(14,26,43,0.4)] p-6 md:p-8 flex flex-col items-center justify-center gap-3 hover:-translate-y-1 transition-transform w-full max-w-xs md:max-w-sm"
             >
               <div className="h-20 md:h-28 flex items-center justify-center">
                 <img src={f.src} alt={f.name} className="h-full w-auto max-w-full object-contain" />
@@ -64,7 +63,7 @@ const PartnersMarquee = () => {
         </div>
       </div>
 
-      {/* Continuous marquee — full color, no hover pause */}
+      {/* Continuous marquee */}
       <div className="relative flex overflow-hidden">
         <div className="pointer-events-none absolute left-0 top-0 h-full w-16 md:w-32 z-10 bg-gradient-to-r from-[#fbf9f6] to-transparent" />
         <div className="pointer-events-none absolute right-0 top-0 h-full w-16 md:w-32 z-10 bg-gradient-to-l from-[#fbf9f6] to-transparent" />

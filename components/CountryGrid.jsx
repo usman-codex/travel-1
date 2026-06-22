@@ -1,10 +1,11 @@
 "use client";
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
+import { supabase } from '@/lib/supabase';
 
-const countries = [
+const staticCountries = [
   { code: "MY", name: "Malaysia", price: "15K" },
   { code: "SG", name: "Singapore", price: "22K" },
   { code: "AZ", name: "Azerbaijan", price: "12K" },
@@ -24,6 +25,21 @@ const countries = [
 ];
 
 const CountryGrid = () => {
+  const [countries, setCountries] = useState(staticCountries);
+
+  const fetchCountries = useCallback(() => {
+    if (!supabase) return;
+    supabase
+      .from('visa_countries')
+      .select('*')
+      .order('order_index', { ascending: true })
+      .then(({ data }) => {
+        if (data && data.length > 0) setCountries(data);
+      });
+  }, []);
+
+  useEffect(() => { fetchCountries(); }, [fetchCountries]);
+
   return (
     <section className="py-24 md:py-32 bg-paper">
       <div className="container mx-auto px-6 md:px-10">
@@ -34,7 +50,7 @@ const CountryGrid = () => {
               Worldwide coverage
             </p>
             <h2 className="font-serif text-[40px] md:text-6xl text-[#0e1a2b] leading-[0.95]">
-              16 countries we<br />
+              {countries.length} countries we<br />
               <span className="italic text-[#c7654d]">file visas for.</span>
             </h2>
           </div>
@@ -48,7 +64,7 @@ const CountryGrid = () => {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
           {countries.map((c, i) => (
             <motion.div
-              key={i}
+              key={c.id || i}
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}

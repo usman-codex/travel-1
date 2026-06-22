@@ -5,7 +5,7 @@ import { Star, Plane, Phone } from 'lucide-react';
 
 const UmrahHero = () => {
   const [index, setIndex] = useState(0);
-  const images = ["/images/umrah.jpg", "/images/hajj.jpg"];
+  const images = ["/images/umrah.jpg", "/images/umrah-hero.jpg"];
 
   useEffect(() => {
     const timer = setInterval(() => setIndex((prev) => (prev + 1) % images.length), 7000);

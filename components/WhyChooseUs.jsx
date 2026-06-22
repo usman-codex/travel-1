@@ -5,7 +5,7 @@ import { Award, Tag, Headphones, CalendarCheck, ShieldCheck, Users } from 'lucid
 
 const WhyChooseUs = () => {
   const features = [
-    { icon: Award, title: "IATA certified", sub: "Trusted agency" },
+    { icon: Award, title: "PSA certified", sub: "Trusted agency" },
     { icon: Tag, title: "Best fares", sub: "Lowest-price guarantee" },
     { icon: Headphones, title: "24/7 support", sub: "Always on call" },
     { icon: CalendarCheck, title: "Fast booking", sub: "Confirmed in minutes" },

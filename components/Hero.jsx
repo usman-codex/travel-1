@@ -1,51 +1,51 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plane, Hotel, Map, FileCheck2, Search, Calendar, Users, MapPin, ArrowUpRight, Compass, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
+import { supabase } from '@/lib/supabase';
 
-const slides = [
+const staticSlides = [
   {
     id: 1,
-    image: "/images/travel1.jpg",
+    image: "/images/uzbekistan-hero.jpg",
     eyebrow: "Featured · Uzbekistan Airways direct",
     title: "Uzbekistan,",
-    titleAccent: "along the Silk Road.",
-    desc: "Tashkent, Samarkand & Bukhara across 8 nights — direct Uzbekistan Airways flights, 4-star boutique stays, daily breakfast and a private driver-guide. Our most-loved journey of the year.",
-    btnText: "Explore Uzbekistan",
+    title_accent: "along the Silk Road.",
+    description: "Tashkent, Samarkand & Bukhara across 8 nights — direct Uzbekistan Airways flights, 4-star boutique stays, daily breakfast and a private driver-guide. Our most-loved journey of the year.",
+    btn_text: "Explore Uzbekistan",
     href: "/tours",
-    flag: true,
   },
   {
     id: 2,
-    image: "/images/umrah.jpg",
-    eyebrow: "Sacred Journey",
-    title: "21 Days Umrah",
-    titleAccent: "without the noise.",
-    desc: "Five-star hotels within walking distance of Haram, direct flights, ziyarat transport and a dedicated mu'allim — engineered for stillness.",
-    btnText: "View itinerary",
-    href: "/umrah-packages",
+    image: "/images/azerbaijan-hero.jpg",
+    eyebrow: "Discover Azerbaijan",
+    title: "7 Days in Baku",
+    title_accent: "and beyond.",
+    description: "Explore the vibrant streets of Baku, the ancient charm of Sheki, the natural beauty of Gabala, and the unique landscapes of Gobustan with comfortable accommodations and guided tours.",
+    btn_text: "View itinerary",
+    href: "/tours",
   },
   {
     id: 3,
-    image: "/images/tour3.jpg",
-    eyebrow: "Honeymoon · 6 nights",
-    title: "Istanbul &",
-    titleAccent: "Cappadocia.",
-    desc: "Bosphorus mornings, balloon sunrises over the valleys, boutique cave hotels and private transfers. A honeymoon, properly composed.",
-    btnText: "Explore tour",
+    image: "/images/tajikistan-hero.jpg",
+    eyebrow: "Adventure · 6 Nights",
+    title: "Explore",
+    title_accent: "Tajikistan.",
+    description: "Journey through the majestic Pamir Mountains, crystal-clear alpine lakes, historic Silk Road sites, and the vibrant culture of Dushanbe with comfortable stays and guided excursions.",
+    btn_text: "Explore tour",
     href: "/tours",
   },
   {
     id: 4,
-    image: "/images/travel2.jpg",
-    eyebrow: "Honeymoon · 5 nights",
-    title: "Sri Lanka, slowly.",
-    titleAccent: "",
-    desc: "Tea-country bungalows, the train ride through Ella, the south-coast surf belt. We book it, you arrive.",
-    btnText: "Plan this trip",
+    image: "/images/thailand-hero.jpg",
+    eyebrow: "Luxury Escape · 5 Nights",
+    title: "Thailand,",
+    title_accent: "reimagined.",
+    description: "Private transfers, five-star resorts, tropical islands, vibrant nightlife, and curated experiences across Bangkok, Phuket, and Krabi.",
+    btn_text: "Plan this trip",
     href: "/tours",
-  }
+  },
 ];
 
 const TABS = [
@@ -134,9 +134,6 @@ const SearchWidget = () => {
       </div>
 
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mt-5">
-        <div className="flex items-center gap-3 text-[11px] font-semibold text-[#143656]/70">
-          <span className="flex items-center gap-1.5"><ShieldCheck size={14} strokeWidth={2} className="text-[#143656]" /> Secured by Stripe & EasyPaisa</span>
-        </div>
         <button
           type="button"
           className="bg-[#c7654d] hover:bg-[#0e1a2b] text-white px-7 py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow-lg active:scale-[0.98]"
@@ -149,16 +146,34 @@ const SearchWidget = () => {
 };
 
 const HeroSlider = () => {
+  const [slides, setSlides] = useState(staticSlides);
   const [current, setCurrent] = useState(0);
+
+  const fetchSlides = useCallback(() => {
+    if (!supabase) return;
+    supabase
+      .from('hero_slides')
+      .select('*')
+      .eq('is_active', true)
+      .order('order_index', { ascending: true })
+      .then(({ data }) => {
+        if (data && data.length > 0) setSlides(data);
+      });
+  }, []);
+
+  useEffect(() => { fetchSlides(); }, [fetchSlides]);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
     }, 7000);
     return () => clearInterval(timer);
-  }, []);
+  }, [slides.length]);
 
   const slide = slides[current];
+  const titleAccent = slide.title_accent || slide.titleAccent;
+  const description = slide.description || slide.desc;
+  const btnText = slide.btn_text || slide.btnText;
 
   return (
     <section className="relative min-h-screen w-full overflow-hidden bg-[#0e1a2b] pt-28 md:pt-32">
@@ -199,8 +214,8 @@ const HeroSlider = () => {
                 className="display-hero text-white mb-5"
               >
                 {slide.title}
-                {slide.titleAccent && (
-                  <span className="block italic text-[#e7a892]">{slide.titleAccent}</span>
+                {titleAccent && (
+                  <span className="block italic text-[#e7a892]">{titleAccent}</span>
                 )}
               </motion.h1>
 
@@ -210,7 +225,7 @@ const HeroSlider = () => {
                 transition={{ duration: 0.8, delay: 0.2 }}
                 className="text-[15px] md:text-lg text-white/85 mb-8 leading-relaxed max-w-xl"
               >
-                {slide.desc}
+                {description}
               </motion.p>
 
               <motion.div
@@ -219,12 +234,12 @@ const HeroSlider = () => {
                 transition={{ duration: 0.7, delay: 0.35 }}
                 className="flex flex-wrap items-center gap-3 mb-10"
               >
-                <Link href={slide.href}>
+                <Link href={slide.href || '/tours'}>
                   <button
                     type="button"
                     className="bg-[#fbf9f6] text-[#0e1a2b] pl-6 pr-5 py-3.5 rounded-full font-semibold text-sm flex items-center gap-2 hover:bg-[#c7654d] hover:text-white transition-colors shadow-xl"
                   >
-                    {slide.btnText}
+                    {btnText}
                     <ArrowUpRight size={16} strokeWidth={2.5} />
                   </button>
                 </Link>

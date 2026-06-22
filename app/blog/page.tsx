@@ -1,18 +1,33 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User, MessageCircle, ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
-import { blogsData } from '@/data/blogs';
+import { blogsData as staticBlogs } from '@/data/blogs';
+import { supabase } from '@/lib/supabase';
 
 export default function BlogPage() {
+  const [allBlogs, setAllBlogs] = useState(staticBlogs);
   const [currentPage, setCurrentPage] = useState(1);
   const blogsPerPage = 6;
 
+  const fetchBlogs = useCallback(() => {
+    if (!supabase) return;
+    supabase
+      .from('blog_posts')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .then(({ data }) => {
+        if (data && data.length > 0) setAllBlogs(data);
+      });
+  }, []);
+
+  useEffect(() => { fetchBlogs(); }, [fetchBlogs]);
+
   const indexOfLastBlog = currentPage * blogsPerPage;
   const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
-  const currentBlogs = blogsData.slice(indexOfFirstBlog, indexOfLastBlog);
-  const totalPages = Math.ceil(blogsData.length / blogsPerPage);
+  const currentBlogs = allBlogs.slice(indexOfFirstBlog, indexOfLastBlog);
+  const totalPages = Math.ceil(allBlogs.length / blogsPerPage);
 
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
@@ -67,7 +82,7 @@ export default function BlogPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 min-h-[600px]">
           <AnimatePresence mode="wait">
-            {currentBlogs.map((blog, i) => (
+            {currentBlogs.map((blog) => (
               <motion.article
                 key={blog.slug}
                 initial={{ opacity: 0, y: 20 }}

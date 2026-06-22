@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 const faqs = [
   {
     q: "How early should I book my Umrah package?",
-    a: "We recommend booking 2–3 months in advance to lock in the best hotel rates and direct flights — especially around Ramadan, Rajab and school holidays.",
+    a: "We recommend booking 2–3 weeks in advance to lock in the best hotel rates and direct flights — especially around Ramadan, Rajab and school holidays.",
   },
   {
     q: "How do I choose the right Umrah package?",

@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Instrument_Serif, Manrope } from "next/font/google";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import WhatsAppFloat from "@/components/WhatsAppFloat";
-import Loader from "@/components/Loader";
+import SiteChrome from "@/components/SiteChrome";
 import React from "react";
 import "./globals.css";
 
@@ -58,11 +55,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${serif.variable} ${sans.variable}`}>
       <body className="antialiased text-[#0e1a2b] bg-[#fbf9f6]">
-        <Loader />
-        <Navbar />
-        <main>{children}</main>
-        <WhatsAppFloat />
-        <Footer />
+        <SiteChrome>
+          <main>{children}</main>
+        </SiteChrome>
       </body>
     </html>
   );
