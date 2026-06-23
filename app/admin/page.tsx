@@ -227,8 +227,11 @@ export default function AdminPage() {
     const sec = SECTIONS.find(s => s.key === section);
     if (!sec || !sec.table) return;
     setDataLoading(true);
-    const q = supabase.from(sec.table).select('*').order('order_index', { ascending: true }).order('created_at', { ascending: false });
-    const { data: rows, error } = sec.category ? await q.eq('category', sec.category) : await q;
+    const hasOrderIndex = getSectionFields(section).some(f => f.key === 'order_index');
+    let q = supabase.from(sec.table).select('*');
+    if (hasOrderIndex) q = (q as any).order('order_index', { ascending: true });
+    q = (q as any).order('created_at', { ascending: false });
+    const { data: rows, error } = sec.category ? await (q as any).eq('category', sec.category) : await q;
     if (!error) setData(prev => ({ ...prev, [section]: rows || [] }));
     setDataLoading(false);
   }, []);
