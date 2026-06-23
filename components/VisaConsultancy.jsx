@@ -1,35 +1,45 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, ArrowUpRight, Clock, FileCheck2 } from 'lucide-react';
 import Link from 'next/link';
+import { supabase } from '@/lib/supabase';
 
-const visaData = [
-  { id: 1, country: "United Kingdom", type: "Visit Visa", processing: "15–20 working days", success: "94%", image: "/images/travel1.jpg", code: "UK" },
-  { id: 2, country: "United States", type: "B1 / B2 Visa", processing: "30–45 working days", success: "88%", image: "/images/travel2.jpg", code: "US" },
-  { id: 3, country: "Dubai (UAE)", type: "30-Day E-Visa", processing: "3–5 working days", success: "99%", image: "/images/umrah.jpg", code: "AE" },
-  { id: 4, country: "Canada", type: "Visitor Visa", processing: "20–30 working days", success: "91%", image: "/images/tour1.jpg", code: "CA" },
-  { id: 5, country: "Schengen", type: "Multi-Country", processing: "12–18 working days", success: "92%", image: "/images/tour2.jpg", code: "EU" },
-  { id: 6, country: "Turkey", type: "Sticker Visa", processing: "10–15 working days", success: "95%", image: "/images/tour3.jpg", code: "TR" },
+const staticVisas = [
+  { id: 1, country: "United Kingdom", type: "Visit Visa",       processing: "15–20 working days", success: "94%", image: "/images/travel1.jpg", code: "UK", order_index: 1 },
+  { id: 2, country: "United States",  type: "B1 / B2 Visa",     processing: "30–45 working days", success: "88%", image: "/images/travel2.jpg", code: "US", order_index: 2 },
+  { id: 3, country: "Dubai (UAE)",    type: "30-Day E-Visa",     processing: "3–5 working days",   success: "99%", image: "/images/umrah.jpg",   code: "AE", order_index: 3 },
+  { id: 4, country: "Canada",         type: "Visitor Visa",      processing: "20–30 working days", success: "91%", image: "/images/tour1.jpg",   code: "CA", order_index: 4 },
+  { id: 5, country: "Schengen",       type: "Multi-Country",     processing: "12–18 working days", success: "92%", image: "/images/tour2.jpg",   code: "EU", order_index: 5 },
+  { id: 6, country: "Turkey",         type: "Sticker Visa",      processing: "10–15 working days", success: "95%", image: "/images/tour3.jpg",   code: "TR", order_index: 6 },
 ];
 
 const VisaConsultancy = () => {
+  const [visaData, setVisaData] = useState(staticVisas);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const fetchVisas = useCallback(() => {
+    if (!supabase) return;
+    supabase
+      .from('home_visa_cards')
+      .select('*')
+      .order('order_index', { ascending: true })
+      .then(({ data }) => {
+        if (data && data.length > 0) setVisaData(data);
+      });
+  }, []);
+
+  useEffect(() => { fetchVisas(); }, [fetchVisas]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      handleNext();
+      setCurrentIndex((prev) => (prev + 3 >= visaData.length ? 0 : prev + 1));
     }, 7000);
     return () => clearInterval(interval);
-  }, [currentIndex]);
+  }, [currentIndex, visaData.length]);
 
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 3 >= visaData.length ? 0 : prev + 1));
-  };
-
-  const handlePrev = () => {
-    setCurrentIndex((prev) => (prev === 0 ? visaData.length - 3 : prev - 1));
-  };
+  const handleNext = () => setCurrentIndex((prev) => (prev + 3 >= visaData.length ? 0 : prev + 1));
+  const handlePrev = () => setCurrentIndex((prev) => (prev === 0 ? Math.max(0, visaData.length - 3) : prev - 1));
 
   const visibleVisas = visaData.slice(currentIndex, currentIndex + 3);
 
@@ -47,22 +57,13 @@ const VisaConsultancy = () => {
               <span className="italic text-[#c7654d]">drafted by people who've done it 15,000 times.</span>
             </h2>
           </div>
-
           <div className="flex gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={handlePrev}
-              aria-label="Previous"
-              className="p-3 rounded-full bg-white border border-[#e5dfd4] text-[#0e1a2b] hover:bg-[#0e1a2b] hover:text-white hover:border-[#0e1a2b] transition-colors"
-            >
+            <button type="button" onClick={handlePrev} aria-label="Previous"
+              className="p-3 rounded-full bg-white border border-[#e5dfd4] text-[#0e1a2b] hover:bg-[#0e1a2b] hover:text-white hover:border-[#0e1a2b] transition-colors">
               <ChevronLeft size={18} strokeWidth={2} />
             </button>
-            <button
-              type="button"
-              onClick={handleNext}
-              aria-label="Next"
-              className="p-3 rounded-full bg-white border border-[#e5dfd4] text-[#0e1a2b] hover:bg-[#0e1a2b] hover:text-white hover:border-[#0e1a2b] transition-colors"
-            >
+            <button type="button" onClick={handleNext} aria-label="Next"
+              className="p-3 rounded-full bg-white border border-[#e5dfd4] text-[#0e1a2b] hover:bg-[#0e1a2b] hover:text-white hover:border-[#0e1a2b] transition-colors">
               <ChevronRight size={18} strokeWidth={2} />
             </button>
           </div>
@@ -98,24 +99,15 @@ const VisaConsultancy = () => {
                 </div>
 
                 <div className="absolute bottom-6 left-6 right-6 text-white">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#e7a892] mb-2">
-                    {visa.type}
-                  </p>
-                  <h3 className="font-serif text-3xl md:text-4xl leading-[0.95] mb-3">
-                    {visa.country}
-                  </h3>
-
+                  <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#e7a892] mb-2">{visa.type}</p>
+                  <h3 className="font-serif text-3xl md:text-4xl leading-[0.95] mb-3">{visa.country}</h3>
                   <div className="flex items-center gap-2 text-[12px] font-medium text-white/85 mb-5">
                     <Clock size={13} className="text-[#e7a892]" strokeWidth={2} /> {visa.processing}
                   </div>
-
                   <Link href="/visa">
-                    <button
-                      type="button"
-                      className="inline-flex items-center gap-2 bg-white text-[#0e1a2b] pl-4 pr-3 py-2 rounded-full text-xs font-semibold hover:bg-[#c7654d] hover:text-white transition-colors"
-                    >
-                      Check eligibility
-                      <ArrowUpRight size={14} strokeWidth={2.5} />
+                    <button type="button"
+                      className="inline-flex items-center gap-2 bg-white text-[#0e1a2b] pl-4 pr-3 py-2 rounded-full text-xs font-semibold hover:bg-[#c7654d] hover:text-white transition-colors">
+                      Check eligibility <ArrowUpRight size={14} strokeWidth={2.5} />
                     </button>
                   </Link>
                 </div>
@@ -126,18 +118,13 @@ const VisaConsultancy = () => {
 
         <div className="mt-14 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white border border-[#e5dfd4] rounded-2xl px-6 py-5">
           <div>
-            <p className="font-serif text-2xl text-[#0e1a2b] leading-tight">
-              Not sure which visa fits your travel plan?
-            </p>
+            <p className="font-serif text-2xl text-[#0e1a2b] leading-tight">Not sure which visa fits your travel plan?</p>
             <p className="text-[#143656]/70 text-sm mt-1">A 10-minute call with our consultants will sort it.</p>
           </div>
           <Link href="/visa">
-            <button
-              type="button"
-              className="bg-[#0e1a2b] text-white px-6 py-3.5 rounded-full font-semibold text-sm hover:bg-[#c7654d] transition-colors inline-flex items-center gap-2 shrink-0"
-            >
-              <FileCheck2 size={16} strokeWidth={2} />
-              Book free consultation
+            <button type="button"
+              className="bg-[#0e1a2b] text-white px-6 py-3.5 rounded-full font-semibold text-sm hover:bg-[#c7654d] transition-colors inline-flex items-center gap-2 shrink-0">
+              <FileCheck2 size={16} strokeWidth={2} /> Book free consultation
             </button>
           </Link>
         </div>

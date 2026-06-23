@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase';
 import {
   LayoutDashboard, ImageIcon, Map, Globe, FileText, LogOut,
   Plus, Pencil, Trash2, X, Check, AlertCircle, Eye, EyeOff,
-  ChevronUp, ChevronDown, Upload, Menu, ArrowLeft, ArrowUpRight, Moon,
+  ChevronUp, ChevronDown, Upload, Menu, ArrowLeft, ArrowUpRight, Star,
 } from 'lucide-react';
 
 type Section = {
@@ -20,12 +20,14 @@ type Section = {
 const SECTIONS: Section[] = [
   { key: 'overview',          label: 'Website Sections',  pageLabel: '',           icon: LayoutDashboard, table: '' },
   { key: 'hero',              label: 'Hero Slides',       pageLabel: 'Home Page',  icon: ImageIcon,       table: 'hero_slides' },
+  { key: 'popular_tours',     label: 'Popular Tours',     pageLabel: 'Home Page',  icon: Map,             table: 'popular_tours' },
+  { key: 'home_visa',         label: 'Visa Consultancy',  pageLabel: 'Home Page',  icon: Globe,           table: 'home_visa_cards' },
   { key: 'tours_asia',        label: 'Asia Tours',        pageLabel: 'Tours Page', icon: Map,             table: 'tour_cards',    category: 'asia',        group: 'tours' },
   { key: 'tours_middle_east', label: 'Middle East Tours', pageLabel: 'Tours Page', icon: Map,             table: 'tour_cards',    category: 'middle_east', group: 'tours' },
   { key: 'tours_europe',      label: 'Europe Tours',      pageLabel: 'Tours Page', icon: Map,             table: 'tour_cards',    category: 'europe',      group: 'tours' },
   { key: 'visa_cards',        label: 'Visa Cards',        pageLabel: 'Visa Page',    icon: Globe,           table: 'visa_cards' },
   { key: 'visa_countries',    label: 'Visa Countries',    pageLabel: 'Visa Page',    icon: Globe,           table: 'visa_countries' },
-  { key: 'umrah',             label: 'Umrah Packages',    pageLabel: 'Umrah Page',   icon: Moon,            table: 'umrah_packages' },
+  { key: 'umrah',             label: 'Umrah Packages',    pageLabel: 'Umrah Page',   icon: Star,            table: 'umrah_packages' },
   { key: 'blog',              label: 'Blog Posts',        pageLabel: 'Blog Page',    icon: FileText,        table: 'blog_posts' },
 ];
 
@@ -50,6 +52,30 @@ const FIELDS: Record<string, Field[]> = {
     { key: 'image',        label: 'Image',                           type: 'text',     isImage: true },
     { key: 'order_index',  label: 'Order',                           type: 'number' },
     { key: 'is_active',    label: 'Active',                          type: 'checkbox' },
+  ],
+  popular_tours: [
+    { key: 'country',     label: 'Country',                           type: 'text',    required: true },
+    { key: 'title',       label: 'Tour Title',                        type: 'text',    required: true },
+    { key: 'code',        label: 'Country Code (e.g. TH)',            type: 'text' },
+    { key: 'price',       label: 'Price (e.g. 165,000)',              type: 'text' },
+    { key: 'image',       label: 'Image',                             type: 'text',    isImage: true },
+    { key: 'duration',    label: 'Duration (e.g. 4 nights)',          type: 'text' },
+    { key: 'location',    label: 'Location (e.g. Bangkok • Pattaya)', type: 'text' },
+    { key: 'rating',      label: 'Rating (e.g. 4.9)',                 type: 'number' },
+    { key: 'group_size',  label: 'Max Group Size',                    type: 'number' },
+    { key: 'badge',       label: 'Badge (e.g. Best seller)',          type: 'text' },
+    { key: 'featured',    label: 'Featured Card',                     type: 'checkbox' },
+    { key: 'row',         label: 'Row (1 or 2)',                      type: 'number',  required: true },
+    { key: 'order_index', label: 'Order within row',                  type: 'number' },
+  ],
+  home_visa: [
+    { key: 'country',     label: 'Country Name',                      type: 'text',    required: true },
+    { key: 'code',        label: 'Country Code (e.g. UK)',            type: 'text' },
+    { key: 'type',        label: 'Visa Type (e.g. Visit Visa)',       type: 'text' },
+    { key: 'processing',  label: 'Processing (e.g. 15–20 working days)', type: 'text' },
+    { key: 'success',     label: 'Success Rate (e.g. 94%)',           type: 'text' },
+    { key: 'image',       label: 'Image',                             type: 'text',    isImage: true },
+    { key: 'order_index', label: 'Order',                             type: 'number' },
   ],
   tours: [
     { key: 'country',      label: 'Country',                         type: 'text',     required: true },
@@ -108,6 +134,8 @@ const FIELDS: Record<string, Field[]> = {
 
 const displayCols: Record<string, string[]> = {
   hero:           ['eyebrow', 'title', 'order_index', 'is_active'],
+  popular_tours:  ['country', 'title', 'price', 'duration', 'row', 'featured'],
+  home_visa:      ['country', 'code', 'type', 'processing', 'success'],
   tours:          ['country', 'title', 'price', 'featured'],
   visa_cards:     ['name', 'code', 'price', 'processing', 'is_featured'],
   visa_countries: ['name', 'code', 'price', 'order_index'],
@@ -116,7 +144,7 @@ const displayCols: Record<string, string[]> = {
 };
 
 const OVERVIEW_GROUPS = [
-  { page: 'Home Page',   keys: ['hero'] },
+  { page: 'Home Page',   keys: ['hero', 'popular_tours', 'home_visa'] },
   { page: 'Tours Page',  keys: ['tours_asia', 'tours_middle_east', 'tours_europe'] },
   { page: 'Visa Page',   keys: ['visa_cards', 'visa_countries'] },
   { page: 'Umrah Page',  keys: ['umrah'] },
@@ -125,7 +153,7 @@ const OVERVIEW_GROUPS = [
 
 const SIDEBAR_GROUPS = [
   { label: null,    keys: ['overview'] },
-  { label: 'Home',  keys: ['hero'] },
+  { label: 'Home',  keys: ['hero', 'popular_tours', 'home_visa'] },
   { label: 'Tours', keys: ['tours_asia', 'tours_middle_east', 'tours_europe'] },
   { label: 'Visa',  keys: ['visa_cards', 'visa_countries'] },
   { label: 'Umrah', keys: ['umrah'] },
@@ -134,11 +162,13 @@ const SIDEBAR_GROUPS = [
 
 function getSectionFields(key: string) {
   if (key.startsWith('tours_')) return FIELDS['tours'];
+  if (key === 'home_visa') return FIELDS['home_visa'];
   return FIELDS[key] || [];
 }
 
 function getSectionCols(key: string) {
   if (key.startsWith('tours_')) return displayCols['tours'];
+  if (key === 'home_visa') return displayCols['home_visa'];
   return displayCols[key] || [];
 }
 

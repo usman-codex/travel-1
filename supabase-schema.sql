@@ -75,6 +75,36 @@ create table if not exists blog_posts (
   created_at   timestamptz default now()
 );
 
+create table if not exists popular_tours (
+  id           uuid        default gen_random_uuid() primary key,
+  code         text        default '',
+  country      text        not null default '',
+  title        text        not null default '',
+  price        text        default '',
+  image        text        default '',
+  duration     text        default '',
+  location     text        default '',
+  rating       numeric     default 4.8,
+  group_size   integer     default 12,
+  badge        text        default '',
+  featured     boolean     default false,
+  row          integer     default 1,
+  order_index  integer     default 0,
+  created_at   timestamptz default now()
+);
+
+create table if not exists home_visa_cards (
+  id           uuid        default gen_random_uuid() primary key,
+  country      text        not null default '',
+  code         text        default '',
+  type         text        default '',
+  processing   text        default '',
+  success      text        default '',
+  image        text        default '',
+  order_index  integer     default 0,
+  created_at   timestamptz default now()
+);
+
 create table if not exists umrah_packages (
   id           uuid        default gen_random_uuid() primary key,
   tier         text        not null default '',
@@ -92,12 +122,14 @@ create table if not exists umrah_packages (
 
 -- ── 2. ROW LEVEL SECURITY (public read / auth write) ───────
 
-alter table hero_slides     enable row level security;
-alter table tour_cards      enable row level security;
-alter table visa_cards      enable row level security;
-alter table visa_countries  enable row level security;
-alter table blog_posts      enable row level security;
-alter table umrah_packages  enable row level security;
+alter table hero_slides      enable row level security;
+alter table tour_cards       enable row level security;
+alter table visa_cards       enable row level security;
+alter table visa_countries   enable row level security;
+alter table blog_posts       enable row level security;
+alter table umrah_packages   enable row level security;
+alter table popular_tours    enable row level security;
+alter table home_visa_cards  enable row level security;
 
 drop policy if exists "public_all"  on hero_slides;
 drop policy if exists "public_all"  on tour_cards;
@@ -105,18 +137,24 @@ drop policy if exists "public_all"  on visa_cards;
 drop policy if exists "public_all"  on visa_countries;
 drop policy if exists "public_all"  on blog_posts;
 drop policy if exists "public_all"  on umrah_packages;
+drop policy if exists "public_all"  on popular_tours;
+drop policy if exists "public_all"  on home_visa_cards;
 drop policy if exists "public_read" on hero_slides;
 drop policy if exists "public_read" on tour_cards;
 drop policy if exists "public_read" on visa_cards;
 drop policy if exists "public_read" on visa_countries;
 drop policy if exists "public_read" on blog_posts;
 drop policy if exists "public_read" on umrah_packages;
+drop policy if exists "public_read" on popular_tours;
+drop policy if exists "public_read" on home_visa_cards;
 drop policy if exists "auth_write"  on hero_slides;
 drop policy if exists "auth_write"  on tour_cards;
 drop policy if exists "auth_write"  on visa_cards;
 drop policy if exists "auth_write"  on visa_countries;
 drop policy if exists "auth_write"  on blog_posts;
 drop policy if exists "auth_write"  on umrah_packages;
+drop policy if exists "auth_write"  on popular_tours;
+drop policy if exists "auth_write"  on home_visa_cards;
 
 -- Anyone can read (public website)
 create policy "public_read" on hero_slides     for select using (true);
@@ -125,6 +163,8 @@ create policy "public_read" on visa_cards      for select using (true);
 create policy "public_read" on visa_countries  for select using (true);
 create policy "public_read" on blog_posts      for select using (true);
 create policy "public_read" on umrah_packages  for select using (true);
+create policy "public_read" on popular_tours   for select using (true);
+create policy "public_read" on home_visa_cards for select using (true);
 
 -- Only logged-in admin can insert / update / delete
 create policy "auth_write" on hero_slides     for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
@@ -133,6 +173,8 @@ create policy "auth_write" on visa_cards      for all using (auth.role() = 'auth
 create policy "auth_write" on visa_countries  for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 create policy "auth_write" on blog_posts      for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 create policy "auth_write" on umrah_packages  for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+create policy "auth_write" on popular_tours   for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+create policy "auth_write" on home_visa_cards for all using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 
 
 -- ── 3. STORAGE BUCKET ──────────────────────────────────────
@@ -249,6 +291,26 @@ insert into visa_countries (code,name,price,order_index) values
 ('EU','Schengen Area',       '55K',14),
 ('UK','United Kingdom',      '65K',15),
 ('CA','Canada',              '70K',16)
+on conflict do nothing;
+
+insert into popular_tours (code,country,title,price,image,duration,location,rating,group_size,badge,featured,row,order_index) values
+('TH','Thailand',   'Bangkok & Pattaya Beach Escape',      '165,000','/images/travel1.jpg','4 nights','Bangkok • Pattaya',       4.9,12,'Best seller',false,1,1),
+('AZ','Azerbaijan', 'Baku Cultural City Tour',              '215,000','/images/travel2.jpg','4 nights','Baku • Gabala',           4.8,15,'Featured',   false,1,2),
+('LK','Sri Lanka',  'Colombo, Kandy & Tea Trails',          '175,000','/images/tour3.jpg',  '4 nights','Colombo • Kandy',         4.7,14,'Honeymoon',  false,1,3),
+('MV','Maldives',   'All-Inclusive Luxury Resort',          '690,000','/images/tour2.jpg',  '4 nights','Malé • Maafushi',         5.0,8, 'Luxury',     false,1,4),
+('UZ','Uzbekistan', 'Tashkent, Samarkand & Bukhara',        '280,000','/images/tour6.jpg',  '7 nights','Tashkent • Samarkand',    4.8,12,'Featured',   true, 2,1),
+('TR','Turkey',     'Istanbul & Cappadocia Honeymoon',      '350,000','/images/tour3.jpg',  '6 nights','Istanbul • Cappadocia',   4.9,14,'Hot deal',   false,2,2),
+('MY','Malaysia',   'Kuala Lumpur & Genting Highlands',     '185,000','/images/tour4.jpg',  '4 nights','Kuala Lumpur • Genting',  4.6,16,'Family',     false,2,3),
+('AE','UAE',        'Dubai City & Desert Safari',            '220,000','/images/tour6.jpg',  '4 nights','Dubai • Abu Dhabi',       4.9,18,'Luxury',     false,2,4)
+on conflict do nothing;
+
+insert into home_visa_cards (country,code,type,processing,success,image,order_index) values
+('United Kingdom','UK','Visit Visa',      '15–20 working days','94%','/images/travel1.jpg',1),
+('United States', 'US','B1 / B2 Visa',   '30–45 working days','88%','/images/travel2.jpg',2),
+('Dubai (UAE)',   'AE','30-Day E-Visa',   '3–5 working days',  '99%','/images/umrah.jpg',  3),
+('Canada',        'CA','Visitor Visa',    '20–30 working days','91%','/images/tour1.jpg',  4),
+('Schengen',      'EU','Multi-Country',   '12–18 working days','92%','/images/tour2.jpg',  5),
+('Turkey',        'TR','Sticker Visa',    '10–15 working days','95%','/images/tour3.jpg',  6)
 on conflict do nothing;
 
 insert into umrah_packages (tier,title,price,image,nights,hotel,rating,popular,order_index) values
