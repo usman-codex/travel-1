@@ -43,12 +43,12 @@ const Footer = () => {
               Travel <span className="italic text-[#e7a892]">Operations</span>
             </h1>
             <p className="text-[#fbf9f6]/70 leading-relaxed text-sm max-w-md">
-              A DTS-approved travel desk based in Pakistan. We do Umrah, international tours, flights, hotels, visa consultancy and corporate travel — engineered seamlessly, every time.
+              A PSA-approved travel desk based in Pakistan. We do Umrah, international tours, flights, hotels, visa consultancy and corporate travel — engineered seamlessly, every time.
             </p>
 
             <div className="flex flex-wrap gap-2">
               <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full text-[10px] font-semibold">
-                <BadgeCheck size={11} strokeWidth={2} className="text-[#e7a892]" /> DTS Approved
+                <BadgeCheck size={11} strokeWidth={2} className="text-[#e7a892]" /> PSA Approved
               </span>
               <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1.5 rounded-full text-[10px] font-semibold">
                 <ShieldCheck size={11} strokeWidth={2} className="text-[#e7a892]" /> NTN Verified

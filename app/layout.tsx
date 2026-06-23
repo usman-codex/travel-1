@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     template: "%s | Travel Operations",
   },
   description:
-    "Travel Operations is a DTS-approved premium travel agency in Pakistan. Book Umrah packages, Uzbekistan & international tours, flights, hotels and visa services with expert support.",
+    "Travel Operations is a PSA-approved premium travel agency in Pakistan. Book Umrah packages, Uzbekistan & international tours, flights, hotels and visa services with expert support.",
   keywords: [
     "Travel Operations",
     "Umrah Packages 2026",

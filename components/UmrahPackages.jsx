@@ -99,7 +99,7 @@ const UmrahPackages = () => {
             </p>
             <div className="mt-6 flex flex-wrap gap-2 text-[11px] font-semibold text-[#143656]">
               <span className="inline-flex items-center gap-1.5 bg-white border border-[#e5dfd4] px-3 py-1.5 rounded-full">
-                <ShieldCheck size={13} className="text-[#c7654d]" strokeWidth={2} /> DTS-licensed
+                <ShieldCheck size={13} className="text-[#c7654d]" strokeWidth={2} /> PSA-licensed
               </span>
               <span className="inline-flex items-center gap-1.5 bg-white border border-[#e5dfd4] px-3 py-1.5 rounded-full">
                 <BadgeCheck size={13} className="text-[#c7654d]" strokeWidth={2} /> 20,000+ pilgrims served

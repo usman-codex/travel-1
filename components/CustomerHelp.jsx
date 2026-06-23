@@ -26,8 +26,8 @@ const stats = [
 ];
 
 const trust = [
-  { icon: BadgeCheck, label: "DTS Approved" },
-  { icon: ShieldCheck, label: "NTN Verified" },
+  { icon: BadgeCheck, label: "PSA Approved" },
+  { icon: ShieldCheck, label: "PSA Verified" },
   { icon: CreditCard, label: "Secure Payments" },
   { icon: Star, label: "4.9 on Google" },
 ];
