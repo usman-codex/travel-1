@@ -34,9 +34,7 @@ const Navbar = () => {
 
       <nav 
         className={`fixed inset-x-0 z-50 transition-all duration-300 
-        ${scrolled 
-          ? 'top-0 bg-[#fbf9f6]/95 backdrop-blur-md shadow-[0_1px_0_rgba(14,26,43,0.08)]' 
-          : 'top-0 md:top-9 bg-[#fbf9f6] border-b border-[#e5dfd4]'}`}
+        
       >
         <div className="max-w-[1400px] mx-auto px-4 md:px-6 flex items-center justify-between h-20">
           <div className="shrink-0">
