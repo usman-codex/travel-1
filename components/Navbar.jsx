@@ -30,26 +30,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div 
-        className={`hidden md:block fixed top-0 inset-x-0 z-[60] bg-[#0e1a2b] text-[#fbf9f6] text-[11px] transition-all duration-300 
-        ${scrolled ? 'h-0 overflow-hidden opacity-0' : 'h-9 opacity-100'}`}
-      >
-        <div className="max-w-[1400px] mx-auto px-4 md:px-6 h-9 flex items-center justify-between">
-          <div className="flex items-center gap-6 font-medium">
-            <a href="mailto:info@traveloperations.pk" className="flex items-center gap-1.5 hover:text-[#e7a892] transition-colors">
-              <Mail size={11} strokeWidth={2} /> info@traveloperations.pk
-            </a>
-          </div>
-          <div className="flex items-center gap-3 font-medium">
-             <a href="https://www.facebook.com/p/Travel-Operations-61550269560647/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-[#e7a892] transition-colors">
-              <FaFacebookF size={10} /> Facebook
-            </a>
-            <a href="https://www.instagram.com/travel__operations/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-[#e7a892] transition-colors">
-              <FaInstagram size={11} /> Instagram
-            </a>
-          </div>
-        </div>
-      </div>
+    
 
       <nav 
         className={`fixed inset-x-0 z-50 transition-all duration-300 
