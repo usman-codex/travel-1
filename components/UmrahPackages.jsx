@@ -121,23 +121,26 @@ const UmrahPackages = () => {
               transition={{ delay: i * 0.08 }}
               className={`bg-white rounded-2xl overflow-hidden border ${pkg.popular ? 'border-[#c7654d] shadow-[0_20px_60px_-30px_rgba(199,101,77,0.6)]' : 'border-[#e5dfd4]'} flex flex-col group`}
             >
-              <div className="relative h-56 overflow-hidden">
-                <img src={pkg.image} className="h-full w-full object-cover group-hover:scale-[1.05] transition-transform duration-[1200ms]" alt={pkg.title} />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0e1a2b]/70 via-[#0e1a2b]/10 to-transparent"></div>
+              <div className="relative overflow-hidden">
+  <img
+    src={pkg.image}
+    className="w-full h-auto block group-hover:scale-[1.05] transition-transform duration-[1200ms]"
+    alt={pkg.title}
+  />
 
-                <div className="absolute top-4 left-4 flex items-center gap-2">
-                  <span className="font-serif italic text-white text-xl">{pkg.tier}</span>
-                </div>
+  {pkg.popular && (
+    <span className="absolute top-4 right-4 bg-[#c7654d] text-white text-[10px] font-bold tracking-[0.2em] uppercase px-2.5 py-1 rounded-sm">
+      Most chosen
+    </span>
+  )}
+</div>
 
-                {pkg.popular && (
-                  <span className="absolute top-4 right-4 bg-[#c7654d] text-white text-[10px] font-bold tracking-[0.2em] uppercase px-2.5 py-1 rounded-sm">
-                    Most chosen
-                  </span>
-                )}
-
-                <div className="absolute bottom-4 left-4 right-4 text-white">
-                  <h3 className="font-semibold text-lg leading-tight">{pkg.title}</h3>
-                </div>
+<div className="p-6 flex flex-col grow">
+  <div className="mb-4">
+    <span className="font-serif italic text-[#c7654d] text-sm">{pkg.tier}</span>
+    <h3 className="font-semibold text-lg leading-tight text-[#0e1a2b]">{pkg.title}</h3>
+  </div>
+  {/* baqi content waisa hi */}
               </div>
 
               <div className="p-6 flex flex-col grow">
