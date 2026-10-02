@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Plane, Hotel, Bus, FileCheck2, Star, Calendar, BadgeCheck, ArrowUpRight, ShieldCheck, Phone } from 'lucide-react';
+import { Hotel, FileCheck2, Star, Calendar, BadgeCheck, ArrowUpRight, ShieldCheck, Phone } from 'lucide-react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
 
@@ -56,13 +56,6 @@ const staticPackages = [
   },
 ];
 
-const inclusions = [
-  { icon: FileCheck2, label: "Umrah e-visa" },
-  { icon: Plane,      label: "Return airfare" },
-  { icon: Hotel,      label: "Hotel (B&B)" },
-  { icon: Bus,        label: "Ziyara transport" },
-];
-
 const UmrahPackages = () => {
   const [packages, setPackages] = useState(staticPackages);
 
@@ -113,73 +106,65 @@ const UmrahPackages = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {packages.map((pkg, i) => (
-           <motion.article
-  key={pkg.id}
-  initial={{ opacity: 0, y: 20 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  viewport={{ once: true }}
-  transition={{ delay: i * 0.08 }}
-  className={`bg-white rounded-2xl overflow-hidden border ${pkg.popular ? 'border-[#c7654d] shadow-[0_20px_60px_-30px_rgba(199,101,77,0.6)]' : 'border-[#e5dfd4]'} flex flex-col group`}
->
-  <div className="relative aspect-[4/3] shrink-0 overflow-hidden">
-    <img
-      src={pkg.image}
-      alt={pkg.title}
-      className="h-full w-full object-cover"
-    />
+            <motion.article
+              key={pkg.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+              className={`bg-white rounded-2xl overflow-hidden border ${pkg.popular ? 'border-[#c7654d] shadow-[0_20px_60px_-30px_rgba(199,101,77,0.6)]' : 'border-[#e5dfd4]'} flex flex-col group`}
+            >
+              <div className="relative aspect-[4/3] shrink-0 overflow-hidden">
+                <img
+                  src={pkg.image}
+                  alt={pkg.title}
+                  className="h-full w-full object-cover"
+                />
 
-    {pkg.popular && (
-      <span className="absolute top-4 right-4 bg-[#c7654d] text-white text-[10px] font-bold tracking-[0.2em] uppercase px-2.5 py-1 rounded-sm">
-        Most chosen
-      </span>
-    )}
-  </div>
+                {pkg.popular && (
+                  <span className="absolute top-4 right-4 bg-[#c7654d] text-white text-[10px] font-bold tracking-[0.2em] uppercase px-2.5 py-1 rounded-sm">
+                    Most chosen
+                  </span>
+                )}
+              </div>
 
-  <div className="p-6 flex flex-col grow">
-    <div className="mb-5">
-      <span className="font-serif italic text-[#c7654d] text-sm">{pkg.tier}</span>
-      <h3 className="font-semibold text-lg leading-tight text-[#0e1a2b]">{pkg.title}</h3>
-    </div>
+              <div className="p-6 flex flex-col grow">
+                <div className="mb-5">
+                  <span className="font-serif italic text-[#c7654d] text-sm">{pkg.tier}</span>
+                  <h3 className="font-semibold text-lg leading-tight text-[#0e1a2b]">{pkg.title}</h3>
+                </div>
 
-    <div className="space-y-2.5 text-[12px] text-[#143656]/80 mb-5">
-      <div className="flex items-center gap-2">
-        <Calendar size={14} className="text-[#c7654d] shrink-0" strokeWidth={2} /> {pkg.nights}
-      </div>
-      <div className="flex items-center gap-2">
-        <Hotel size={14} className="text-[#c7654d] shrink-0" strokeWidth={2} /> {pkg.hotel}
-      </div>
-      <div className="flex items-center gap-2">
-        <Star size={14} className="text-[#c7654d] shrink-0" fill="currentColor" /> {pkg.rating} guest rating
-      </div>
-    </div>
+                <div className="space-y-2.5 text-[12px] text-[#143656]/80 mb-5">
+                  <div className="flex items-center gap-2">
+                    <Calendar size={14} className="text-[#c7654d] shrink-0" strokeWidth={2} /> {pkg.nights}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Hotel size={14} className="text-[#c7654d] shrink-0" strokeWidth={2} /> {pkg.hotel}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Star size={14} className="text-[#c7654d] shrink-0" fill="currentColor" /> {pkg.rating} guest rating
+                  </div>
+                </div>
 
-    <div className="grid grid-cols-2 gap-2 mb-6 border-y border-[#f1ece4] py-4">
-      {inclusions.map(({ icon: Icon, label }) => (
-        <div key={label} className="flex items-center gap-1.5 text-[11px] text-[#0e1a2b]/75">
-          <Icon size={12} className="text-[#143656] shrink-0" strokeWidth={2} /> {label}
-        </div>
-      ))}
-    </div>
+                <div className="mt-auto border-t border-[#f1ece4] pt-5">
+                  <div className="text-[10px] uppercase tracking-[0.2em] text-[#143656]/50 font-semibold mb-1">Per person from</div>
+                  <div className="flex items-baseline gap-1.5 mb-5">
+                    <span className="font-serif text-3xl text-[#0e1a2b] leading-none">PKR</span>
+                    <span className="font-serif text-3xl text-[#c7654d] leading-none">{pkg.price}</span>
+                  </div>
 
-    <div className="mt-auto">
-      <div className="text-[10px] uppercase tracking-[0.2em] text-[#143656]/50 font-semibold mb-1">Per person from</div>
-      <div className="flex items-baseline gap-1.5 mb-5">
-        <span className="font-serif text-3xl text-[#0e1a2b] leading-none">PKR</span>
-        <span className="font-serif text-3xl text-[#c7654d] leading-none">{pkg.price}</span>
-      </div>
-
-      <Link href="/book-now">
-        <button
-          type="button"
-          className="w-full bg-[#0e1a2b] text-white py-3 rounded-full font-semibold text-xs hover:bg-[#c7654d] transition-colors flex items-center justify-center gap-2"
-        >
-          Reserve seat
-          <ArrowUpRight size={14} strokeWidth={2.5} />
-        </button>
-      </Link>
-    </div>
-  </div>
-</motion.article>
+                  <Link href="/book-now">
+                    <button
+                      type="button"
+                      className="w-full bg-[#0e1a2b] text-white py-3 rounded-full font-semibold text-xs hover:bg-[#c7654d] transition-colors flex items-center justify-center gap-2"
+                    >
+                      Reserve seat
+                      <ArrowUpRight size={14} strokeWidth={2.5} />
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            </motion.article>
           ))}
         </div>
 
