@@ -60,7 +60,7 @@ const inclusions = [
   { icon: FileCheck2, label: "Umrah e-visa" },
   { icon: Plane,      label: "Return airfare" },
   { icon: Hotel,      label: "Hotel (B&B)" },
-  { icon: Bus,        label: "Ziyarat transport" },
+  { icon: Bus,        label: "Ziyara transport" },
 ];
 
 const UmrahPackages = () => {
@@ -90,7 +90,7 @@ const UmrahPackages = () => {
             </p>
             <h2 className="font-serif text-[44px] md:text-6xl leading-[0.95] text-[#0e1a2b] tracking-tight">
               A sacred journey,<br />
-              <span className="italic text-[#143656]">handled end to end.</span>
+              <span className="italic text-[#143656]">handled start to end.</span>
             </h2>
           </div>
           <div className="md:col-span-6 md:col-start-7 md:pt-4">
@@ -121,29 +121,32 @@ const UmrahPackages = () => {
               transition={{ delay: i * 0.08 }}
               className={`bg-white rounded-2xl overflow-hidden border ${pkg.popular ? 'border-[#c7654d] shadow-[0_20px_60px_-30px_rgba(199,101,77,0.6)]' : 'border-[#e5dfd4]'} flex flex-col group`}
             >
-              <div className="relative overflow-hidden">
-  <img
-    src={pkg.image}
-    className="w-full h-auto block group-hover:scale-[1.05] transition-transform duration-[1200ms]"
-    alt={pkg.title}
-  />
+              <div className="relative h-64 shrink-0 overflow-hidden bg-[#0e1a2b]">
+                <img
+                  src={pkg.image}
+                  alt=""
+                  aria-hidden="true"
+                  className="absolute inset-0 h-full w-full object-cover blur-xl scale-110 opacity-60"
+                />
+                <img
+                  src={pkg.image}
+                  alt={pkg.title}
+                  className="relative h-full w-full object-contain"
+                />
 
-  {pkg.popular && (
-    <span className="absolute top-4 right-4 bg-[#c7654d] text-white text-[10px] font-bold tracking-[0.2em] uppercase px-2.5 py-1 rounded-sm">
-      Most chosen
-    </span>
-  )}
-</div>
-
-<div className="p-6 flex flex-col grow">
-  <div className="mb-4">
-    <span className="font-serif italic text-[#c7654d] text-sm">{pkg.tier}</span>
-    <h3 className="font-semibold text-lg leading-tight text-[#0e1a2b]">{pkg.title}</h3>
-  </div>
-  {/* baqi content waisa hi */}
+                {pkg.popular && (
+                  <span className="absolute top-4 right-4 bg-[#c7654d] text-white text-[10px] font-bold tracking-[0.2em] uppercase px-2.5 py-1 rounded-sm">
+                    Most chosen
+                  </span>
+                )}
               </div>
 
               <div className="p-6 flex flex-col grow">
+                <div className="mb-5">
+                  <span className="font-serif italic text-[#c7654d] text-sm">{pkg.tier}</span>
+                  <h3 className="font-semibold text-lg leading-tight text-[#0e1a2b]">{pkg.title}</h3>
+                </div>
+
                 <div className="space-y-2.5 text-[12px] text-[#143656]/80 mb-5">
                   <div className="flex items-center gap-2">
                     <Calendar size={14} className="text-[#c7654d] shrink-0" strokeWidth={2} /> {pkg.nights}
