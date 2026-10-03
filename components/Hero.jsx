@@ -48,102 +48,12 @@ const staticSlides = [
   },
 ];
 
-const TABS = [
-  { id: 'flights', label: 'Flights', Icon: Plane },
-  { id: 'hotels', label: 'Hotels', Icon: Hotel },
-  { id: 'tours', label: 'Tours', Icon: Map },
-  { id: 'visa', label: 'Visa', Icon: FileCheck2 },
-];
 
-const TRIP_TYPES = ['One Way', 'Round Trip', 'Multi-City'];
 
-const Field = ({ icon: Icon, label, placeholder, type = 'text' }) => (
-  <label className="flex flex-col gap-1 bg-white hover:bg-[#fbf9f6] border border-[#e5dfd4] rounded-xl px-3 py-2.5 transition-colors cursor-pointer">
-    <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#143656]/60">{label}</span>
-    <div className="flex items-center gap-2">
-      <Icon size={15} className="text-[#c7654d] shrink-0" strokeWidth={2} />
-      <input
-        type={type}
-        placeholder={placeholder}
-        className="w-full bg-transparent outline-none text-sm font-semibold text-[#0e1a2b] placeholder:text-[#143656]/40"
-      />
-    </div>
-  </label>
-);
 
-const SearchWidget = () => {
-  const [activeTab, setActiveTab] = useState('flights');
-  const [tripType, setTripType] = useState('Round Trip');
+        
 
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7, delay: 0.4 }}
-      className="bg-[#fbf9f6] rounded-2xl shadow-[0_30px_60px_-20px_rgba(14,26,43,0.45)] p-4 md:p-5 w-full max-w-5xl border border-white/40"
-    >
-      <div className="flex flex-wrap gap-1.5 mb-4 border-b border-[#e5dfd4] pb-3">
-        {TABS.map(({ id, label, Icon }) => (
-          <button
-            key={id}
-            type="button"
-            onClick={() => setActiveTab(id)}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-semibold transition-all ${
-              activeTab === id
-                ? 'bg-[#0e1a2b] text-[#fbf9f6]'
-                : 'text-[#0e1a2b]/70 hover:bg-[#f1ece4]'
-            }`}
-          >
-            <Icon size={15} strokeWidth={2} /> {label}
-          </button>
-        ))}
-      </div>
 
-      {activeTab === 'flights' && (
-        <div className="flex gap-2 mb-4">
-          {TRIP_TYPES.map((t) => (
-            <button
-              key={t}
-              type="button"
-              onClick={() => setTripType(t)}
-              className={`px-3 py-1 text-[11px] font-semibold tracking-wide rounded-full border transition-all ${
-                tripType === t
-                  ? 'bg-[#c7654d] text-white border-[#c7654d]'
-                  : 'border-[#e5dfd4] text-[#143656]/70 hover:border-[#143656]'
-              }`}
-            >
-              {t}
-            </button>
-          ))}
-        </div>
-      )}
-
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
-        <Field icon={MapPin} label={activeTab === 'visa' ? 'Destination country' : 'From'} placeholder={activeTab === 'visa' ? 'Dubai (UAE)' : 'Karachi (KHI)'} />
-        {activeTab !== 'visa' && (
-          <Field icon={MapPin} label="To" placeholder="Dubai (DXB)" />
-        )}
-        <Field icon={Calendar} label="Departure" type="date" />
-        {activeTab !== 'visa' && (
-          <Field icon={Calendar} label={activeTab === 'hotels' ? 'Check-out' : 'Return'} type="date" />
-        )}
-        <Field icon={Users} label={activeTab === 'hotels' ? 'Guests & rooms' : activeTab === 'visa' ? 'Applicants' : 'Travellers'} placeholder="2 Adults" />
-        {activeTab === 'visa' && (
-          <Field icon={FileCheck2} label="Visa type" placeholder="Tourist / Visit" />
-        )}
-      </div>
-
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mt-5">
-        <button
-          type="button"
-          className="bg-[#c7654d] hover:bg-[#0e1a2b] text-white px-7 py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all shadow-lg active:scale-[0.98]"
-        >
-          <Search size={16} strokeWidth={2.5} /> Search {TABS.find(t => t.id === activeTab)?.label}
-        </button>
-      </div>
-    </motion.div>
-  );
-};
 
 const HeroSlider = () => {
   const [slides, setSlides] = useState(staticSlides);
@@ -256,7 +166,6 @@ const HeroSlider = () => {
             </motion.div>
           </AnimatePresence>
 
-          <SearchWidget />
         </div>
       </div>
 
