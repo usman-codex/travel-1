@@ -118,7 +118,7 @@ const UmrahPackages = ({ featured = false }) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {packages.map((pkg, i) => {
             // Home page par sab cards popular hain, is liye wahan highlight/badge nahi dikhate
-            const highlight = pkg.popular && !featured;
+            const highlight = pkg.popular;
 
             return (
               <motion.article
